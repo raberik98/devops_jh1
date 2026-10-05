@@ -1,0 +1,6 @@
+# ${vpc_name}
+
+## public sn
+%{ for name, subnet in public_subnets ~}
+- ${name} (${subnet.cidr_block})
+%{ endfor ~}
