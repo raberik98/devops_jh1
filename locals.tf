@@ -5,4 +5,5 @@ locals {
 
 
   eks_clusters = { for cluster in var.eks_clusters : cluster.name => cluster }
+  ecr_registries = { for reg in var.ecr_registries : reg.name => reg }
 }

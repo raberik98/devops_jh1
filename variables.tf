@@ -25,8 +25,9 @@ variable "vpcs" {
 variable "eks_clusters" {
   description = "value"
   type = list(object({
-    name        = string
-    k8s_version = string
+    name                    = string
+    k8s_version             = string
+    configure_local_kubectl = bool
 
     nodes = list(object({
       name     = string
@@ -37,5 +38,15 @@ variable "eks_clusters" {
       min_scale     = number
     }))
     fargates = list(bool) # TODO
+  }))
+}
+
+
+variable "ecr_registries" {
+  type = list(object({
+    name = string
+    auto_local_login = bool
+
+    images = list(string)
   }))
 }

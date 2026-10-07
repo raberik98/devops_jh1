@@ -65,6 +65,16 @@ resource "aws_eks_addon" "kube-proxy" {
   addon_name   = "kube-proxy"
 }
 
+resource "aws_eks_addon" "pod_identity_agent" {
+  cluster_name      = aws_eks_cluster.this.name
+  addon_name        = "eks-pod-identity-agent"
+}
+
+
+
+
+
+
 # Worker node
 resource "aws_eks_node_group" "worker_node_group" {
   for_each = local.node_groups
@@ -92,3 +102,14 @@ resource "aws_eks_node_group" "worker_node_group" {
   ]
 }
 
+// Automate local kubectl configuration
+resource "terraform_data" "configure_kubectl" {
+  count = var.configure_local_kubectl ? 1 : 0
+  depends_on = [aws_eks_cluster.this]
+
+  provisioner "local-exec" {
+    command = <<EOT
+      aws eks update-kubeconfig --region ${var.kubectl_config.aws_region} --name ${aws_eks_cluster.this.name} --profile ${var.kubectl_config.aws_cli_profile}
+    EOT
+  }
+}

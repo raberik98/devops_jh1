@@ -36,3 +36,16 @@ variable "fargates" {
 variable "vpc_id" {
   type = string
 }
+
+variable "configure_local_kubectl" {
+  type = bool
+  description = "Should I configure your local kubectl? (Must have awscli and kubectl installed)"
+}
+
+variable "kubectl_config" {
+  type = object({
+    aws_region = string
+    aws_cli_profile = string 
+  })
+  description = "Only used for configuring local kubectl"
+}
